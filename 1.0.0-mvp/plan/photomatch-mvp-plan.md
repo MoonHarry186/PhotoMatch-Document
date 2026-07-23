@@ -45,6 +45,7 @@ Change request
 | `1.0.0` | `2026-07-20` | Mobile UI update | Loại bỏ global header trên mobile, chuyển sang contextual top controls và bổ sung prompt thiết kế logo. | Draft |
 | `1.0.0` | `2026-07-20` | Booking flow update | Cho Customer đặt lịch trực tiếp; hệ thống tạo/reuse match, conversation và booking `PENDING` trong một transaction. | Draft |
 | `1.0.0` | `2026-07-20` | MVP scope update | Chọn Cloudflare R2 để lưu ảnh/file và bổ sung Customer review Photographer sau booking hoàn tất. | Draft |
+| `1.0.0` | `2026-07-23` | Brand alignment | Đồng bộ section `DESIGNS` với PhotoMatch Brand Identity Guidelines: Royal Blue/Vivid Purple, Plus Jakarta Sans, logo pin–shutter, layout, component, motion và accessibility. | Draft |
 
 ## Quy tắc quản lý thay đổi
 
@@ -277,39 +278,77 @@ Luồng thành công chính:
 
 # DESIGNS
 
+Nguồn sự thật cho nhận diện và product design là [PhotoMatch Brand Identity & Product Design Guidelines](../../brand/photomatch-brand-identity-guidelines.md). Khi có khác biệt về logo, màu sắc, typography, hình ảnh hoặc giọng điệu, brand guideline được ưu tiên hơn prompt/mockup cũ.
+
 ## Design direction
 
-Photomatch cần tạo cảm giác tin cậy, hiện đại và giàu hình ảnh vì sản phẩm xoay quanh việc chọn người chụp ảnh, xem portfolio và đặt lịch. Giao diện ưu tiên ảnh thật của photographer/customer, hành động rõ ràng và thông tin đủ nhanh để người dùng quyết định match hoặc booking mà không bị nhiễu.
+PhotoMatch là marketplace nhiếp ảnh gia theo vị trí, được định vị là cách nhanh, đơn giản và đáng tin cậy để tìm đúng nhiếp ảnh gia. Trải nghiệm phải hiện đại nhưng mang tính con người, ưu tiên portfolio thật, thông tin minh bạch và quyết định nhanh mà không biến sản phẩm thành giao diện dating hoặc studio cao cấp.
 
 | Nguyên tắc | Mô tả |
 | :---- | :---- |
-| Visual-first | Ảnh portfolio, avatar và bối cảnh chụp là điểm nhấn chính trên mobile. |
-| Trust-first | Badge xác minh, trạng thái hồ sơ, report/block và thông tin booking phải rõ ràng, không dùng màu gây hiểu nhầm. |
-| Calm marketplace | Hồng raspberry được dùng tiết chế trên nền trung tính sáng, sạch; tránh giao diện quá neon, ngọt hoặc giống game dating thuần túy. |
-| Fast decision | Card discovery/nearby phải hiển thị ngay ảnh, tên, khoảng cách, dịch vụ, giá và trạng thái sẵn sàng. |
-| Inclusive | Typography dễ đọc, contrast đạt chuẩn và touch target đủ lớn cho iOS/Android. |
-| Consistent token | Mobile và web admin dùng chung tên token màu, spacing, radius, shadow và text style để tránh lệch hệ thống. |
+| Simple first | Mỗi màn hình có một hành động chính rõ ràng, CTA dùng động từ trực tiếp và tránh thuật ngữ kỹ thuật. |
+| Trust by design | Xác minh, rating, số lượt đặt, vị trí, giá, booking, report và block phải minh bạch, không dùng màu gây hiểu nhầm. |
+| Photography first | Portfolio và khoảnh khắc thật là nội dung chính; UI hỗ trợ chứ không cạnh tranh với hình ảnh. |
+| Mobile-first | Ưu tiên thao tác một tay, nội dung dễ quét, vùng chạm lớn và phản hồi tức thời trên iOS/Android. |
+| Fast decision-making | Card discovery/nearby hiển thị nhanh phong cách, rating, địa điểm, giá, chuyên môn, lịch trống và trạng thái xác minh. |
+| Human & friendly | Copy ngắn gọn, tự nhiên, khuyến khích hành động, không phán xét hoặc quá corporate. |
+| Professional & consistent | Bố cục sạch, ít chi tiết thừa và dùng chung semantic token giữa mobile với Web Admin. |
+
+PhotoMatch không được trở thành giao diện quá xa xỉ, quá nghệ thuật đến khó dùng, quá trẻ con, quá giống studio chụp ảnh hoặc quá giống Tinder về hình ảnh và ngôn ngữ.
+
+## Brand voice and CTA
+
+- Copy phải ngắn gọn, rõ ràng, tự nhiên và hướng tới hành động.
+- Dùng các CTA cụ thể như `Tìm nhiếp ảnh gia`, `Xem hồ sơ`, `Gửi tin nhắn`, `Đặt lịch`, `Xác nhận`, `Tiếp tục`.
+- Không dùng CTA chung chung như `OK`, `Đồng ý`, `Thực hiện`, `Xử lý` nếu có thể gọi đúng hành động.
+- Không hiển thị thuật ngữ kỹ thuật như `matching`, `submit`, `khởi tạo provider` cho user.
+- Thông báo lỗi phải nói rõ vấn đề và cách khắc phục, không đổ lỗi hoặc phán xét user.
+
+## Logo system
+
+Logo PhotoMatch kết hợp **location pin** và **camera shutter**. Không tự vẽ lại, kéo giãn, xoay, đổi cấu trúc shutter, thêm shadow/3D mạnh hoặc đổi sang màu ngoài hệ thống.
+
+| Phiên bản | Dùng cho | Quy tắc |
+| :---- | :---- | :---- |
+| Primary/horizontal | Auth, email, tài liệu, Web Admin | Icon bên trái wordmark; `Photo` dùng Deep Navy, `Match` dùng Royal Blue hoặc gradient xanh–tím. |
+| Stacked | Hero, poster, cover khi đủ không gian | Icon trên wordmark; chỉ dùng tagline khi kích thước đủ đọc. |
+| Icon only | App icon, splash, favicon, avatar, badge nhỏ | Chỉ dùng pin + shutter; không có chữ hoặc tagline. |
+| Monochrome | Nền tối, in đơn sắc | Deep Navy trên nền sáng, trắng trên nền tối hoặc đen khi in đơn sắc. |
+
+- Khoảng an toàn tối thiểu quanh logo bằng một cánh shutter hoặc `25%` chiều cao biểu tượng.
+- Logo có wordmark trên màn hình rộng tối thiểu `120px`; icon-only tối thiểu `24px`.
+- App icon nguồn dùng canvas `1024x1024`, nền gradient Royal Blue → Vivid Purple, biểu tượng trắng, không chữ, không tagline, không viền trắng.
+- Logo chỉ xuất hiện có chủ đích ở splash/auth hoặc điểm chạm thương hiệu; không lặp lại trên mọi màn hình đã đăng nhập.
 
 ## Brand palette
 
 | Token | Hex | Dùng cho | Ghi chú |
 | :---- | :---- | :---- | :---- |
-| `primary.50` | `#FDF2F8` | Nền selected, highlight rất nhẹ | Không dùng thay cho surface chính. |
-| `primary.100` | `#FCE7F3` | Selected chip, badge background, focus tint | Luôn ghép với text hồng đậm đủ contrast. |
-| `primary.500` | `#D81B60` | CTA chính, link, active tab, focus ring | Hồng raspberry hiện đại, tự tin và giàu tính hình ảnh. |
-| `primary.600` | `#C2185B` | CTA pressed/hover | Dùng cho trạng thái tương tác mạnh hơn và chữ trên nền hồng nhạt. |
-| `accent.500` | `#F59E0B` | Điểm nhấn portfolio, rating, highlight nhẹ | Không dùng làm màu lỗi/cảnh báo chính. |
-| `success.500` | `#16A34A` | Booking accepted, verified, available | Chỉ dùng khi trạng thái thực sự tích cực. |
-| `warning.500` | `#F97316` | Pending, cần chú ý, sắp hết hạn | Dùng tiết chế để không gây cảm giác lỗi. |
-| `danger.500` | `#DC2626` | Report, block, rejected, penalty | Dành cho hành động hoặc trạng thái rủi ro. |
-| `info.500` | `#0891B2` | Thông tin phụ, system message | Hỗ trợ trạng thái trung lập. |
-| `neutral.950` | `#0F172A` | Text chính light mode | Dùng cho heading/body quan trọng. |
-| `neutral.700` | `#334155` | Text phụ đậm | Metadata, mô tả ngắn. |
-| `neutral.500` | `#64748B` | Placeholder, helper text | Không dùng cho text nhỏ trên nền sáng nếu contrast không đủ. |
-| `neutral.200` | `#E2E8F0` | Border, divider | Border mặc định. |
-| `neutral.100` | `#F1F5F9` | Surface phụ | Empty state, chip background. |
-| `neutral.50` | `#F8FAFC` | App background light | Nền chính light mode. |
-| `white` | `#FFFFFF` | Card/surface chính | Dùng cho sheet, modal, list item. |
+| `primary.500` / Royal Blue | `#2563EB` | CTA chính, link, focus, active state | Button chính ưu tiên màu đặc để ổn định và dễ đọc. |
+| `secondary.500` / Vivid Purple | `#7C3AED` | Gradient, creative accent, selected highlight | Không cạnh tranh với Orange trên cùng một màn hình. |
+| `accent.500` / Vibrant Orange | `#F97316` | Badge, điểm nhấn có kiểm soát | Không thay thế màu warning/error theo ngữ nghĩa. |
+| `neutral.950` / Deep Navy | `#0F172A` | Heading, text chính, nền tối | Màu chữ chính của thương hiệu. |
+| `neutral.500` / Slate Gray | `#64748B` | Text phụ, metadata | Kiểm tra contrast khi dùng ở cỡ nhỏ. |
+| `neutral.200` / Light Border | `#E2E8F0` | Border, divider, disabled background | Border mặc định trên nền sáng. |
+| `neutral.50` / Soft White | `#F8FAFC` | App background light | Chiếm phần lớn diện tích giao diện. |
+| `white` / Pure White | `#FFFFFF` | Card, modal, sheet, input | Surface chính. |
+| `success.500` | `#16A34A` | Verified, available, accepted, completed | Chỉ dùng cho trạng thái thực sự tích cực. |
+| `warning.500` | `#F59E0B` | Pending, cần chú ý, sắp hết hạn | Luôn đi kèm text hoặc icon. |
+| `danger.500` | `#DC2626` | Error, report, block, rejected, penalty | Dùng cho lỗi hoặc hành động rủi ro. |
+| `info.500` | `#2563EB` | System information | Dùng Royal Blue theo ngữ nghĩa info. |
+| `disabled.text` | `#94A3B8` | Text/icon disabled | Không dùng cho nội dung cần đọc chính. |
+
+Tỷ lệ màu định hướng: `60%` nền trắng/neutral, `25%` Royal Blue, `10%` Deep Navy và tối đa `5%` Purple hoặc Orange accent.
+
+## Brand gradient
+
+```css
+linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)
+```
+
+- Được dùng cho app icon, splash, hero, selected card, promotional banner hoặc brand illustration.
+- Không dùng gradient cho mọi button, toàn bộ bottom navigation hoặc card thông thường.
+- Purple và Orange không được cùng trở thành điểm nhấn chính trên một màn hình.
 
 ## Dark palette
 
@@ -332,17 +371,19 @@ Photomatch cần tạo cảm giác tin cậy, hiện đại và giàu hình ản
 | `surfaceMuted` | `neutral.100` | `dark.surfaceMuted` | Chip, empty state, skeleton. |
 | `border` | `neutral.200` | `dark.border` | Border/divider. |
 | `textPrimary` | `neutral.950` | `dark.textPrimary` | Heading/body chính. |
-| `textSecondary` | `neutral.700` | `dark.textSecondary` | Nội dung phụ. |
+| `textSecondary` | `neutral.500` | `dark.textSecondary` | Nội dung phụ. |
 | `textMuted` | `neutral.500` | `dark.textMuted` | Placeholder/helper/metadata. |
 | `ctaPrimary` | `primary.500` | `primary.500` | CTA chính. |
+| `ctaSecondary` | `secondary.500` | `secondary.500` | Accent/selected state có kiểm soát. |
 | `ctaDanger` | `danger.500` | `danger.500` | Hành động nguy hiểm. |
+| `focusRing` | `primary.500` | `primary.500` | Focus rõ trên keyboard/screen reader flow. |
 
 ## Role and status colors
 
 | Trường hợp | Token | Ghi chú UI |
 | :---- | :---- | :---- |
 | Customer | `primary.500` | Dùng cho badge role hoặc icon nhỏ. |
-| Photographer | `accent.500` | Dùng cho badge role, không thay thế CTA chính. |
+| Photographer | `secondary.500` | Dùng cho badge role/selected accent, không thay thế CTA chính. |
 | Verified | `success.500` | Luôn đi cùng icon/tên `Verified`, không chỉ dựa vào màu. |
 | Available | `success.500` | Dot/status text `Sẵn sàng`. |
 | Busy | `warning.500` | Dot/status text `Đang bận`. |
@@ -357,10 +398,11 @@ Photomatch cần tạo cảm giác tin cậy, hiện đại và giàu hình ản
 
 | Nền tảng | Font chính | Font fallback | Ghi chú |
 | :---- | :---- | :---- | :---- |
-| Mobile iOS | `Inter` | `System` / `SF Pro` | Bundle Inter nếu cần đồng nhất brand. |
-| Mobile Android | `Inter` | `Roboto` | Dùng Expo Font để preload trước màn chính. |
-| Web admin | `Inter` | `system-ui`, `Arial`, `sans-serif` | Cấu hình trong Tailwind/Ant Design theme. |
-| Numeric/price | `Inter` tabular numbers | System fallback | Bật `font-variant-numeric: tabular-nums` trên web nếu cần. |
+| Mobile iOS/Android | `Plus Jakarta Sans` | `Inter`, system font | Bundle và preload trước màn hình chính. |
+| Web Admin | `Plus Jakarta Sans` | `Inter`, `system-ui`, `Segoe UI`, `sans-serif` | Cấu hình thống nhất trong theme. |
+| Numeric/price | `Plus Jakarta Sans` tabular numbers | System fallback | Giá, rating, thời gian và số liệu phải dễ quét. |
+
+Weight được phép: `300`, `400`, `500`, `600`, `700`. Không dùng quá ba cấp độ chữ trên một card, không dùng chữ in hoa cho đoạn dài và tránh font quá mảnh trên ảnh.
 
 ## Text styles
 
@@ -368,14 +410,13 @@ Photomatch cần tạo cảm giác tin cậy, hiện đại và giàu hình ản
 | :---- | :---- | :---- | :---- | :---- |
 | `display` | 32 | 40 | 700 | Splash/onboarding headline quan trọng. |
 | `h1` | 28 | 36 | 700 | Title màn hình chính. |
-| `h2` | 24 | 32 | 700 | Section lớn, modal title. |
+| `h2` | 24 | 32 | 600 | Section lớn, modal title. |
 | `h3` | 20 | 28 | 600 | Card title, form section. |
-| `body-lg` | 18 | 28 | 400 | Nội dung nổi bật, onboarding copy. |
-| `body-md` | 16 | 24 | 400 | Body mặc định, input text. |
-| `body-sm` | 14 | 20 | 400 | Metadata, helper text. |
-| `label` | 14 | 20 | 600 | Label input, chip, badge. |
-| `caption` | 12 | 16 | 500 | Timestamp, trạng thái nhỏ. |
-| `button` | 16 | 24 | 600 | CTA chính/phụ. |
+| `body-lg` | 16 | 24 | 400 | Nội dung chính, onboarding copy. |
+| `body` | 14 | 22 | 400 | Body phổ biến. |
+| `label` | 13 | 18 | 600 | Label input, chip, badge. |
+| `caption` | 12 | 16 | 400 | Timestamp, metadata. |
+| `button` | 14 | 20 | 600 | CTA chính/phụ. |
 
 ## Spacing, radius and elevation
 
@@ -388,16 +429,20 @@ Photomatch cần tạo cảm giác tin cậy, hiện đại và giàu hình ản
 | `space.5` | 20 | Gap giữa form fields. |
 | `space.6` | 24 | Section spacing. |
 | `space.8` | 32 | Khoảng cách block lớn/onboarding. |
-| `radius.sm` | 6 | Input, badge, chip. |
-| `radius.md` | 8 | Button, card nhỏ, admin panel. |
-| `radius.lg` | 12 | Bottom sheet, modal, image card. |
+| `space.10` | 40 | Hero hoặc block lớn. |
+| `radius.sm` | 8 | Badge, chip, control nhỏ. |
+| `radius.md` | 12 | Button, input. |
+| `radius.lg` | 16 | Card, image card. |
+| `radius.xl` | 20 | Modal. |
+| `radius.sheet` | 24 | Hai góc trên của bottom sheet. |
 | `radius.full` | 999 | Avatar, pill, status dot. |
-| `shadow.sm` | Subtle | Card nhỏ/list item. |
-| `shadow.md` | Medium | Bottom sheet, floating action, swipe card. |
+| `shadow.card` | `0 4px 16px rgba(15, 23, 42, 0.08)` | Card, sheet, lớp nổi cần phân tách nhẹ. |
+
+Không dùng shadow dày, glow xanh hoặc hiệu ứng 3D trên card thông thường.
 
 ## Layout rules
 
-- Mobile dùng safe area đầy đủ, padding ngang mặc định `16`, khoảng cách section `24`.
+- Mobile dùng base grid `4pt`, safe area đầy đủ, padding ngang mặc định `16`, khoảng cách section `24–32` và padding card `12–16`.
 - Mobile không dùng global header chứa logo, search và notification trên mọi màn hình. Nội dung chính bắt đầu ngay sau safe area để tận dụng chiều cao.
 - Logo chỉ xuất hiện có chủ đích ở splash/auth, không lặp lại trong thanh điều hướng của các màn hình đã đăng nhập.
 - Màn hình cấp cao dùng title trong content khi thật sự cần; search/filter được đặt trong vùng nội dung liên quan thay vì thanh app-wide.
@@ -407,9 +452,14 @@ Photomatch cần tạo cảm giác tin cậy, hiện đại và giàu hình ản
 - Bottom sheet dùng cho filter, quick action và confirm nhẹ; màn riêng dùng cho form dài hoặc flow nhiều bước.
 - Web admin ưu tiên layout dense, dễ scan: sidebar cố định, table có filter bar, detail mở theo page hoặc drawer tùy độ phức tạp.
 - Không lồng nhiều card trong card; chỉ dùng card cho item lặp lại, modal/sheet hoặc khối dữ liệu cần đóng khung.
+- Mỗi màn hình chỉ có một primary action; destructive action chỉ nổi bật tại điểm xác nhận.
 
 ## Imagery and media
 
+- Hình ảnh tập trung vào con người thật, nhiếp ảnh gia đang làm việc, khoảnh khắc tự nhiên, ánh sáng chân thực, cảm xúc tích cực và bối cảnh Việt Nam khi phù hợp.
+- Ưu tiên cặp đôi, gia đình, chân dung, sự kiện, không gian ngoài trời, quá trình chuẩn bị và hậu trường.
+- Không dùng ảnh stock quá giả, filter nặng, retouch phi thực tế, ảnh quá tối/buồn, watermark bên thứ ba hoặc chỉ tập trung vào thiết bị.
+- Photographer card ưu tiên tỷ lệ `4:5`; portfolio dùng `1:1` hoặc `4:5`; hero/banner dùng `16:9` hoặc `3:2`; avatar dùng `1:1`.
 - Portfolio phải ưu tiên ảnh thật, tỷ lệ hiển thị nhất quán và crop không làm mất chủ thể.
 - Discovery card dùng ảnh hero lớn, overlay text phải có scrim tối nhẹ để đảm bảo đọc được.
 - Avatar có fallback bằng initials và màu nền trung tính nếu user chưa upload ảnh.
@@ -418,26 +468,47 @@ Photomatch cần tạo cảm giác tin cậy, hiện đại và giàu hình ản
 
 ## Iconography
 
-- Dùng một bộ icon thống nhất cho mobile và web admin nếu khả thi, ưu tiên icon outline đơn giản.
-- Icon chỉ dùng màu semantic khi truyền đạt trạng thái; icon navigation/action mặc định dùng `textSecondary`.
+- Dùng một bộ icon outline bo tròn, stroke đồng nhất `1.75–2px`, kích thước chuẩn `20`, `24`, `28`.
+- Bộ icon cốt lõi gồm Camera, Location, Search, Heart/Match, Message, Calendar/Booking, User, Shield/Verification, Star/Rating, Filter, Portfolio và Notification.
+- Icon mặc định dùng Deep Navy hoặc Slate Gray; active dùng Royal Blue; selected/match dùng Royal Blue hoặc gradient; disabled dùng `#94A3B8`; error dùng `#DC2626`.
+- Không trộn icon outline và filled tùy ý trong cùng navigation.
 - Badge quan trọng như `Verified`, booking status, report/penalty phải có cả icon hoặc label, không chỉ dùng màu.
 - Icon button cần accessible label và hit area đủ lớn.
 - Không hiển thị icon chuông global vì MVP không có notification inbox; notification được xử lý qua push/deep link và settings.
 
+## Core component styling
+
+| Component | Quy chuẩn MVP |
+| :---- | :---- |
+| Primary button | Royal Blue, chữ trắng, cao `48px`, radius `12px`, weight `600`; không dùng gradient mặc định. |
+| Secondary button | Nền trắng/surface, border Light Border, chữ Deep Navy. |
+| Tertiary button | Không background, chữ Royal Blue. |
+| Destructive button | Error Red; chỉ dùng cho thao tác rủi ro và phải có confirm khi cần. |
+| Input | Label luôn hiển thị; cao tối thiểu `48px`; radius `12px`; focus Royal Blue; error Red kèm hướng sửa. |
+| Photographer card | Ảnh/portfolio nổi bật, tên, loại, rating + số review, khu vực, giá khởi điểm, badge xác minh và action phù hợp; không chứa mô tả dài. |
+| Photographer profile | Ưu tiên Portfolio → tên/xác minh → rating → chuyên môn → giá → khu vực → giới thiệu → review → CTA nhắn tin/đặt lịch. |
+| Bottom navigation | Tối đa năm mục; active dùng Royal Blue; không phủ gradient toàn thanh và không dựa chỉ vào màu. |
+
 ## Motion and interaction
 
-- Motion phải nhanh và có mục đích: feedback tap, transition sheet/modal, swipe gesture và skeleton loading.
+- Micro-interaction dùng `150–200ms`; screen transition dùng `200–300ms`; bottom sheet dùng `250–350ms`.
+- Motion phải hỗ trợ hiểu trạng thái, không dùng animation chỉ để trang trí.
 - Swipe card cần phản hồi trực tiếp theo hướng kéo; trạng thái accept/reject/like phải rõ trước khi submit.
+- Match animation phải ngắn và có thể bỏ qua.
 - Loading chính dùng skeleton cho list/card; spinner chỉ dùng cho action ngắn hoặc submit.
 - Error state phải có retry hoặc hướng xử lý tiếp theo.
 - Tôn trọng reduced motion khi platform/browser yêu cầu.
+- Haptic nhẹ chỉ dùng cho match thành công, booking xác nhận, thao tác lưu hoặc lỗi quan trọng; không dùng cho mọi lần bấm.
 
 ## Accessibility
 
-- Contrast text chính đạt WCAG AA trên light và dark mode.
+- Text thường đạt contrast tối thiểu `4.5:1`; text lớn tối thiểu `3:1` trên light và dark mode.
 - Không truyền đạt trạng thái chỉ bằng màu; badge/status cần text hoặc icon.
+- Vùng chạm tối thiểu `44x44`; button chính ưu tiên cao `48–52`.
 - Form field có label rõ, error message cụ thể và focus state dễ nhận biết.
 - Nội dung quan trọng phải hỗ trợ dynamic type/font scaling ở mobile.
+- Ảnh có alt/accessibility description phù hợp; icon-only button bắt buộc có accessibility label.
+- Form có thứ tự focus hợp lý và không mất CTA khi keyboard mở.
 - Hành động nguy hiểm như block, report, reject booking hoặc khóa user cần confirm rõ.
 
 ## Design tokens implementation
@@ -448,13 +519,37 @@ Photomatch cần tạo cảm giác tin cậy, hiện đại và giàu hình ản
 | Mobile | `photomatch-mobile/src/theme/typography.ts` | Font family, text styles, weights, line heights. |
 | Mobile | `photomatch-mobile/src/theme/spacing.ts` | Spacing, radius, shadow/elevation tokens. |
 | Mobile | `photomatch-mobile/tailwind.config.js` | Map token sang NativeWind class. |
-| Web admin | `photomatch-admin/src/theme/tokens.ts` | Token dùng chung cho dashboard. |
-| Web admin | `photomatch-admin/tailwind.config.ts` | Map màu/spacing/typography cho Tailwind. |
-| Web admin | `photomatch-admin/src/theme/antd-theme.ts` | Map token sang Ant Design theme. |
+| Web admin | `photomatch-web/src/theme/tokens.ts` | Token dùng chung cho dashboard. |
+| Web admin | `photomatch-web/src/theme/antd-theme.ts` | Map token sang Ant Design theme. |
+
+Token tối thiểu:
+
+```ts
+export const colors = {
+  primary: "#2563EB",
+  secondary: "#7C3AED",
+  accent: "#F97316",
+  navy: "#0F172A",
+  white: "#FFFFFF",
+  background: "#F8FAFC",
+  textPrimary: "#0F172A",
+  textSecondary: "#64748B",
+  border: "#E2E8F0",
+  disabled: "#94A3B8",
+  success: "#16A34A",
+  warning: "#F59E0B",
+  error: "#DC2626",
+  info: "#2563EB",
+} as const;
+
+export const gradients = {
+  brand: ["#2563EB", "#7C3AED"],
+} as const;
+```
 
 ## Design generation prompt
 
-- [Google Stitch prompts cho mobile và web admin](../designs/stitch-mvp-design-prompts.md)
+- [Google Stitch prompts cho mobile và web admin](../designs/stitch-mvp-design-prompts.md) phải dùng brand guideline và section này làm nguồn sự thật; mọi prompt cũ dùng raspberry hoặc Inter không còn hiệu lực.
 
 # COMPONENTS
 
