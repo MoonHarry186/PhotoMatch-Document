@@ -229,8 +229,7 @@ erDiagram
     DISCOVERY_PRESENCE {
         uuid user_role_id PK, FK
         uuid current_location_id FK
-        boolean show_on_map
-        boolean show_in_swipe
+        boolean is_visible
         boolean available_now
         decimal public_radius_meters
         decimal public_latitude
@@ -563,7 +562,7 @@ erDiagram
 | `ROLES`                 | Danh mục vai trò như `CUSTOMER`, `PHOTOGRAPHER`, `ADMIN`.               |
 | `USER_ROLES`            | Bảng trung gian Many-to-Many giữa tài khoản và vai trò.                 |
 | `PHOTOGRAPHER_PROFILES` | Các thông tin chỉ dành cho vai trò thợ ảnh.                             |
-| `USER_SETTINGS`         | Ngôn ngữ, giao diện, loại bản đồ và các thiết lập riêng tư.             |
+| `USER_SETTINGS`         | Ngôn ngữ, giao diện và các thiết lập riêng tư; `map_type` là trường dormant cho hậu MVP. |
 
 Không tạo bảng `CUSTOMER_PROFILES` riêng vì các thông tin hiện có của người dùng thường đã nằm trong `USER_PROFILES`. Điều này tránh lặp avatar, tên, thành phố và phần giới thiệu.
 
@@ -593,14 +592,14 @@ Cách này giúp cùng một cấu trúc dữ liệu hỗ trợ cả hai phía c
 | --------------------------- | --------------------------------------------------------------------------- |
 | `CITIES`                    | Danh mục tỉnh hoặc thành phố.                                               |
 | `USER_LOCATIONS`            | Lưu vị trí GPS hiện tại và lịch sử vị trí nếu cần.                          |
-| `DISCOVERY_PRESENCE`        | Xác định một vai trò có xuất hiện trên bản đồ hoặc màn hình quẹt hay không. |
+| `DISCOVERY_PRESENCE`        | Xác định một vai trò có xuất hiện trong Nearby/discovery hay không.         |
 | `DISCOVERY_FILTERS`         | Lưu tiêu chí tìm kiếm như bán kính, giá, thành phố và trạng thái sẵn sàng.  |
 | `DISCOVERY_FILTER_SERVICES` | Quan hệ Many-to-Many giữa bộ lọc và dịch vụ.                                |
 
 `USER_PROFILES.city_id` là thành phố cư trú hoặc thành phố khai báo.
 `USER_LOCATIONS` là vị trí GPS hiện tại. Hai dữ liệu này có ý nghĩa khác nhau nên không bị xem là trùng lặp.
 
-Vị trí trả về cho người khác không dùng trực tiếp tọa độ GPS thật. `DISCOVERY_PRESENCE.public_latitude` và `DISCOVERY_PRESENCE.public_longitude` là tọa độ công khai đã được làm lệch chủ động trong phạm vi cấu hình. `public_radius_meters` mô tả bán kính công khai hiển thị, còn `location_noise_meters` mô tả mức sai lệch đã áp dụng.
+Mobile MVP không nhận tọa độ của người khác. Backend có thể dùng `DISCOVERY_PRESENCE.public_latitude`, `public_longitude`, `public_radius_meters` và `location_noise_meters` nội bộ để truy vấn và tạo distance bucket; các trường này không thuộc response contract của Nearby.
 
 `DISCOVERY_PRESENCE.visible_until` xác định thời điểm hết hiển thị. Giá trị mặc định được tính từ `USER_SETTINGS.location_visibility_duration_hours`, nhưng người dùng có thể chọn một khoảng thời gian hiển thị ngắn hơn cho từng lần bật hiển thị.
 
@@ -752,7 +751,7 @@ Các ràng buộc nghiệp vụ khác:
 * `scheduled_end` phải sau `scheduled_start`.
 * Mỗi booking phải tham chiếu đúng một match; Customer direct booking tạo hoặc tái sử dụng match và conversation trước khi tạo booking `PENDING` trong cùng transaction.
 * Unmatch không xóa match/conversation; phải lưu `ended_at` và actor/reason khi có, đồng thời giữ lịch sử read-only.
-* Vị trí hiển thị công khai phải được làm lệch chủ động, không trả về GPS chính xác.
+* Public point phải được làm lệch chủ động và chỉ backend sử dụng để query/tính distance bucket; mobile không nhận tọa độ của target.
 * Vị trí hiển thị tự động hết hạn theo `visible_until`; thời lượng mặc định do người dùng cấu hình.
 
 # Giả định thiết kế
@@ -761,8 +760,8 @@ Các ràng buộc nghiệp vụ khác:
 2. Người dùng chuyển đổi giữa các vai trò trong ứng dụng.
 3. Trang cá nhân cơ bản dùng chung giữa các vai trò.
 4. Portfolio chỉ thuộc vai trò thợ ảnh.
-5. Chỉ người bật `show_on_map` hoặc `show_in_swipe` mới xuất hiện trong phần khám phá.
-6. Thợ ảnh nhìn thấy toàn bộ người dùng đã bật hiển thị phù hợp với ngữ cảnh bản đồ hoặc quẹt.
+5. Chỉ người bật `DISCOVERY_PRESENCE.is_visible` mới xuất hiện trong Nearby/discovery.
+6. Thợ ảnh nhìn thấy người dùng đã bật hiển thị phù hợp với Nearby list hoặc luồng quẹt.
 7. Chat chỉ được mở sau khi có match.
 8. Một cặp match có một conversation nhưng có thể phát sinh nhiều booking.
 9. Booking và Customer review Photographer sau booking `COMPLETED` đều thuộc phạm vi MVP.
@@ -778,11 +777,11 @@ Người dùng quẹt phải để thể hiện quan tâm; thợ ảnh bấm ch�
 
 ## Thợ ảnh nhìn thấy gì?
 
-Thợ ảnh nhìn thấy toàn bộ người dùng đã bật hiển thị. Điều kiện hiển thị phụ thuộc vào `DISCOVERY_PRESENCE.show_on_map`, `DISCOVERY_PRESENCE.show_in_swipe` và thời hạn `visible_until`.
+Thợ ảnh nhìn thấy người dùng đã bật hiển thị. Điều kiện hiển thị phụ thuộc vào `DISCOVERY_PRESENCE.is_visible`, eligibility và thời hạn `visible_until`.
 
 ## Quyền riêng tư vị trí
 
-* Hiển thị vị trí có sai lệch chủ động, không trả về GPS chính xác.
+* Public point có sai lệch chủ động và chỉ dùng trong backend; mobile chỉ nhận khoảng cách gần đúng, không nhận tọa độ của target.
 * Vị trí tự động hết hạn sau số giờ do người dùng cấu hình trong `USER_SETTINGS.location_visibility_duration_hours`.
 * Người dùng được phép bật hiển thị trong một khoảng thời gian nhất định; giá trị cụ thể được lưu bằng `DISCOVERY_PRESENCE.visible_until`.
 
@@ -824,7 +823,7 @@ Các màn hình sau chủ yếu là giao diện hoặc dữ liệu tĩnh nên kh
 * Đăng ký.
 * Quên mật khẩu.
 * About application.
-* Chọn loại bản đồ.
+* Chọn loại bản đồ (deferred sau MVP; không cần bảng mới nếu tái sử dụng `USER_SETTINGS.map_type`).
 * Giao diện sáng hoặc tối.
 * Giới thiệu bạn bè nếu chỉ sử dụng chức năng chia sẻ link.
 

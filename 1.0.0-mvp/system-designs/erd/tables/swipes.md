@@ -19,7 +19,7 @@ Lưu hành động quẹt hoặc phản hồi giữa hai vai trò trong luồng 
 | `target_user_role_id` | `uuid` | Khóa ngoại | Khóa ngoại tham chiếu `USER_ROLES`. |
 | `discovery_filter_id` | `uuid` | Khóa ngoại | Khóa ngoại tham chiếu `DISCOVERY_FILTERS`. |
 | `direction` | `varchar` | Không | Hướng hoặc loại hành động quẹt, ví dụ left, right, accept hoặc reject. |
-| `source` | `varchar` | Không | Nguồn tạo hành động, ví dụ discovery feed hoặc nearby map. |
+| `source` | `varchar` | Không | Nguồn tạo hành động, ví dụ discovery feed hoặc Nearby list. |
 | `created_at` | `datetime` | Không | Thời điểm bản ghi được tạo. |
 | `updated_at` | `datetime` | Không | Thời điểm bản ghi được cập nhật gần nhất. |
 

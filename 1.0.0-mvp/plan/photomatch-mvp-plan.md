@@ -46,6 +46,8 @@ Change request
 | `1.0.0` | `2026-07-20` | Booking flow update | Cho Customer đặt lịch trực tiếp; hệ thống tạo/reuse match, conversation và booking `PENDING` trong một transaction. | Draft |
 | `1.0.0` | `2026-07-20` | MVP scope update | Chọn Cloudflare R2 để lưu ảnh/file và bổ sung Customer review Photographer sau booking hoàn tất. | Draft |
 | `1.0.0` | `2026-07-23` | Brand alignment | Đồng bộ section `DESIGNS` với PhotoMatch Brand Identity Guidelines: Royal Blue/Vivid Purple, Plus Jakarta Sans, logo pin–shutter, layout, component, motion và accessibility. | Draft |
+| `1.0.0` | `2026-07-30` | `CR-002` scope reduction | Loại Nearby map, marker, map type và Google Maps khỏi MVP; giữ Nearby list, location, presence và server-side filters. | Approved for draft incorporation |
+| `1.0.0` | `2026-07-30` | `CR-003` navigation consolidation | Loại tab/màn Nearby độc lập; tích hợp `Gần tôi` và bán kính vào Discovery filter. | Approved for draft incorporation |
 
 ## Quy tắc quản lý thay đổi
 
@@ -87,7 +89,7 @@ Luồng thành công chính:
 - User có thể chọn thêm một vai trò ban đầu khi onboarding, ví dụ `PHOTOGRAPHER`.
 - Sau onboarding, user không được thay đổi vai trò ban đầu đã chọn.
 - User có thêm vai trò khác `CUSTOMER` được phép switch giữa `CUSTOMER` và vai trò đã chọn.
-- Hồ sơ không đáp ứng điều kiện tối thiểu thì không được hiển thị trong discovery/nearby.
+- Hồ sơ không đáp ứng điều kiện tối thiểu thì không được hiển thị trong Discovery.
 - Admin MVP không duyệt trước nội dung, hồ sơ hoặc portfolio.
 - Admin MVP vẫn xử lý report, penalty, user, photographer, booking và các cấu hình hệ thống.
 
@@ -115,20 +117,19 @@ Luồng thành công chính:
 | Portfolio | Photographer | Quản lý ảnh portfolio. | Portfolio phải là ảnh thực tế; admin không duyệt trước trong MVP. |
 | Giá dịch vụ | Photographer | Khai báo khoảng giá theo dịch vụ. | Giá dùng cho discovery filter và booking. |
 | Trạng thái sẵn sàng | Photographer | Bật/tắt trạng thái đang sẵn sàng nhận việc. | Có thể dùng để lọc `available_only`. |
-| Ẩn/hiện hồ sơ | User | User quyết định hồ sơ có xuất hiện trong discovery/nearby không. | Chỉ người bật hiển thị mới xuất hiện. |
+| Ẩn/hiện hồ sơ | User | User quyết định hồ sơ có xuất hiện trong Discovery và kết quả `Gần tôi` không. | Chỉ người bật hiển thị mới xuất hiện. |
 | Switch role | User có nhiều role | Chuyển giữa `CUSTOMER` và vai trò đã chọn khi onboarding. | Không cho thêm/sửa vai trò sau onboarding trong MVP. |
 
-## Quanh Đây
+## Bộ lọc Gần tôi trong Discovery
 
 | Feature | Actor | Mô tả | Rule MVP |
 | :---- | :---- | :---- | :---- |
-| Bản đồ quanh đây | User | Xem người phù hợp theo vị trí. | Chỉ hiển thị người bật hiển thị và phù hợp bộ lọc. |
-| Vị trí làm lệch | System | Vị trí công khai được làm lệch ngẫu nhiên x km. | Không trả GPS thật của user cho người khác. |
+| Gần tôi | Customer | Lọc feed Discovery theo vị trí và khoảng cách gần đúng. | Opt-in; chỉ hỏi GPS khi user bật và chỉ hiển thị người có presence phù hợp. |
+| Khoảng cách gần đúng | System | Backend dùng vị trí công khai đã làm lệch để xếp hạng và tạo distance bucket. | Mobile không nhận GPS thật hoặc tọa độ công khai của user khác. |
 | Quản lý vị trí chính xác | User | Cập nhật hoặc xóa vị trí chính xác của chính mình. | Chỉ owner/system truy cập; xóa exact location đồng thời tắt public presence. |
-| Bán kính mặc định | User | Tìm kiếm quanh vị trí hiện tại. | Mặc định 20 km. |
+| Bán kính mặc định | Customer | Giới hạn kết quả khi bật `Gần tôi`. | Mặc định 20 km; không áp dụng khi `Gần tôi` tắt. |
 | Thời hạn hiển thị vị trí | User | Vị trí hiển thị có thời hạn. | Mặc định 24h và user có thể điều chỉnh. |
 | Filter quanh đây | User | Lọc theo dịch vụ, giá, trạng thái available và xác minh. | Filter có thể lưu local trên thiết bị trong MVP. |
-| Chọn kiểu bản đồ | User | Đổi kiểu bản đồ. | Theo enum `MapType`. |
 
 ## Quẹt & Match
 
@@ -290,7 +291,7 @@ PhotoMatch là marketplace nhiếp ảnh gia theo vị trí, được định v�
 | Trust by design | Xác minh, rating, số lượt đặt, vị trí, giá, booking, report và block phải minh bạch, không dùng màu gây hiểu nhầm. |
 | Photography first | Portfolio và khoảnh khắc thật là nội dung chính; UI hỗ trợ chứ không cạnh tranh với hình ảnh. |
 | Mobile-first | Ưu tiên thao tác một tay, nội dung dễ quét, vùng chạm lớn và phản hồi tức thời trên iOS/Android. |
-| Fast decision-making | Card discovery/nearby hiển thị nhanh phong cách, rating, địa điểm, giá, chuyên môn, lịch trống và trạng thái xác minh. |
+| Fast decision-making | Card Discovery hiển thị nhanh phong cách, rating, địa điểm, giá, chuyên môn, lịch trống và trạng thái xác minh; thêm distance bucket khi bật `Gần tôi`. |
 | Human & friendly | Copy ngắn gọn, tự nhiên, khuyến khích hành động, không phán xét hoặc quá corporate. |
 | Professional & consistent | Bố cục sạch, ít chi tiết thừa và dùng chung semantic token giữa mobile với Web Admin. |
 
@@ -446,7 +447,7 @@ Không dùng shadow dày, glow xanh hoặc hiệu ứng 3D trên card thông th�
 - Mobile không dùng global header chứa logo, search và notification trên mọi màn hình. Nội dung chính bắt đầu ngay sau safe area để tận dụng chiều cao.
 - Logo chỉ xuất hiện có chủ đích ở splash/auth, không lặp lại trong thanh điều hướng của các màn hình đã đăng nhập.
 - Màn hình cấp cao dùng title trong content khi thật sự cần; search/filter được đặt trong vùng nội dung liên quan thay vì thanh app-wide.
-- Màn hình chi tiết và form chỉ giữ contextual top controls tối thiểu như back, close, step progress hoặc overflow. Với màn hình giàu hình ảnh/map, các control này có thể overlay an toàn trên nội dung.
+- Màn hình chi tiết và form chỉ giữ contextual top controls tối thiểu như back, close, step progress hoặc overflow. Với màn hình giàu hình ảnh, các control này có thể overlay an toàn trên nội dung.
 - Touch target tối thiểu `44x44` trên mobile.
 - CTA chính nằm trong vùng dễ với tới ở mobile, đặc biệt ở discovery, booking và form submit.
 - Bottom sheet dùng cho filter, quick action và confirm nhẹ; màn riêng dùng cho form dài hoặc flow nhiều bước.
@@ -559,22 +560,21 @@ export const gradients = {
 | :---- | :---- | :---- | :---- |
 | `AppScreen` | Mobile | Wrapper chuẩn cho mỗi màn hình. | Xử lý safe area, background, padding, keyboard avoidance. |
 | `ContextualTopControls` | Mobile | Điều khiển tối thiểu theo ngữ cảnh. | Không tạo global header; chỉ gồm back/close/progress/overflow khi màn hình thực sự cần. |
-| `BottomTabs` | Mobile | Điều hướng tab chính. | Discovery, Nearby, Messages, Profile. |
+| `BottomTabs` | Mobile | Điều hướng tab chính. | Discovery, Messages, Profile. |
 | `Button` | Mobile | Nút hành động chính/phụ. | Có loading, disabled, icon. |
 | `IconButton` | Mobile | Nút icon nhỏ. | Dùng cho back, close, filter, settings, more. |
 | `TextField` | Mobile | Input text. | Hỗ trợ error, helper text, secure text. |
-| `SelectField` | Mobile | Chọn một giá trị. | Dùng cho role, service, city, map type. |
+| `SelectField` | Mobile | Chọn một giá trị. | Dùng cho role, service và city. |
 | `MultiSelectField` | Mobile | Chọn nhiều giá trị. | Dùng cho activity fields, services, filter. |
 | `DateTimeField` | Mobile | Chọn ngày/giờ. | Dùng trong booking. |
 | `PriceRangeField` | Mobile | Nhập khoảng giá. | Dùng trong filter và dịch vụ. |
 | `AvatarPicker` | Mobile | Chọn/tải avatar. | Dùng onboarding/profile. |
 | `ImageUploader` | Mobile | Upload ảnh. | Dùng portfolio, chat image, report evidence nếu cần. |
 | `FileUploader` | Mobile | Upload file. | Dùng chat file. |
-| `LocationPermissionCard` | Mobile | Xin quyền vị trí. | Dùng onboarding và nearby. |
-| `MapViewCard` | Mobile | Hiển thị bản đồ. | Không trả GPS thật của user khác; dùng tọa độ làm lệch. |
+| `LocationPermissionCard` | Mobile | Xin quyền vị trí theo ngữ cảnh. | Dùng khi bật `Gần tôi` và trong quản lý profile/presence. |
 | `SwipeCard` | Mobile | Card hồ sơ trong discovery. | Hiển thị ảnh, tên, khoảng cách, dịch vụ, giá. |
 | `SwipeActions` | Mobile | Nút bỏ qua/quan tâm/chấp nhận/từ chối. | Theo role hiện tại. |
-| `ProfileSummaryCard` | Mobile | Tóm tắt hồ sơ user/photographer. | Dùng nearby, discovery, match. |
+| `ProfileSummaryCard` | Mobile | Tóm tắt hồ sơ user/photographer. | Dùng Discovery và match. |
 | `PortfolioGrid` | Mobile | Lưới ảnh portfolio. | Photographer cần tối thiểu 6 ảnh để hiển thị. |
 | `ChatBubble` | Mobile | Bong bóng tin nhắn. | Hỗ trợ text, ảnh, file, trạng thái gửi/đọc. |
 | `BookingStatusBadge` | Mobile | Badge trạng thái booking. | Theo `BookingStatus`. |
@@ -619,8 +619,7 @@ export const gradients = {
 | `ActivityFieldsForm` | Mobile onboarding | Activity fields theo role. | Chỉ chọn field được role cho phép. |
 | `ServicesForm` | Mobile onboarding | Services, service mode, min/max price, currency, price unit. | Photographer cần dịch vụ và giá để hiển thị. |
 | `PortfolioForm` | Mobile photographer | Ảnh portfolio, title, description, service. | Photographer cần tối thiểu 6 ảnh thực tế để hiển thị. |
-| `DiscoveryFilterForm` | Mobile | Services, price range, radius, available only, verified only. | Filter có thể lưu local trên thiết bị trong MVP. |
-| `NearbyFilterForm` | Mobile | Services, price range, radius mặc định 20km, available only, verified only. | Chỉ lọc người đang bật hiển thị. |
+| `DiscoveryFilterForm` | Mobile | Services, price range, `Gần tôi`, radius, available only, verified only. | Filter có thể lưu local; radius/location chỉ gửi khi `Gần tôi` bật. |
 | `BookingForm` | Mobile | Photographer, service, scheduled start/end, address, agreed price, currency, note. | Customer có thể đặt trực tiếp; submit thành công tạo/reuse match, conversation và booking `PENDING`. |
 | `PhotographerReviewForm` | Mobile customer | Rating 1-5, comment tùy chọn, booking context. | Chỉ Customer của booking `COMPLETED`; mỗi booking tối đa một review. |
 | `ReportForm` | Mobile | Reason code, description, target user/message/booking, evidence optional. | Reason code theo `ReportReasonCode`. |
@@ -732,7 +731,7 @@ Dùng chung cho `CITIES`, `ACTIVITY_FIELDS`, `SERVICES`, `LEGAL_DOCUMENTS` nếu
 | Giá trị | Ý nghĩa |
 | :---- | :---- |
 | `DISCOVERY` | Hành động phát sinh từ màn hình quẹt. |
-| `NEARBY` | Hành động phát sinh từ màn hình quanh đây/bản đồ. |
+| `NEARBY` | Hành động phát sinh từ danh sách quanh đây. |
 | `PROFILE` | Hành động phát sinh từ trang chi tiết hồ sơ. |
 
 ## MatchStatus
@@ -861,7 +860,6 @@ Dùng chung cho `CITIES`, `ACTIVITY_FIELDS`, `SERVICES`, `LEGAL_DOCUMENTS` nếu
 | :---- | :---- |
 | `Language` | `VI`, `EN` |
 | `Theme` | `SYSTEM`, `LIGHT`, `DARK` |
-| `MapType` | `STANDARD`, `SATELLITE`, `HYBRID` |
 
 # NFR
 
@@ -884,8 +882,8 @@ Dùng chung cho `CITIES`, `ACTIVITY_FIELDS`, `SERVICES`, `LEGAL_DOCUMENTS` nếu
 
 | Yêu cầu | Mức MVP | Ghi chú triển khai |
 | :---- | :---- | :---- |
-| Vị trí làm lệch | Bắt buộc | Không trả GPS thật của user khác; chỉ trả tọa độ công khai đã random lệch x km. |
-| Thời hạn hiển thị vị trí | Bắt buộc | Mặc định 24h, user có thể chỉnh; hết hạn thì không xuất hiện discovery/nearby. |
+| Vị trí và khoảng cách gần đúng | Bắt buộc | Không trả GPS thật hoặc tọa độ công khai của user khác; client chỉ nhận distance bucket do backend tính. |
+| Thời hạn hiển thị vị trí | Bắt buộc | Mặc định 24h, user có thể chỉnh; hết hạn thì không xuất hiện trong kết quả `Gần tôi`. |
 | Read receipt privacy | Bắt buộc | User có thể bật/tắt trạng thái đã đọc. |
 | Block privacy | Bắt buộc | Người bị block không được nhắn tiếp và không xuất hiện trong discovery/match interaction. |
 | Data minimization | Bắt buộc | API chỉ trả field cần cho màn hình hiện tại. |
@@ -896,7 +894,7 @@ Dùng chung cho `CITIES`, `ACTIVITY_FIELDS`, `SERVICES`, `LEGAL_DOCUMENTS` nếu
 | Yêu cầu | Mức MVP | Ghi chú triển khai |
 | :---- | :---- | :---- |
 | API response time | P95 < 500ms cho API thường | Không tính upload file lớn hoặc truy vấn map phức tạp. |
-| Discovery/Nearby query | P95 < 1s | Cần index PostGIS và cache/filter hợp lý. |
+| Discovery global/nearby query | P95 < 1s | Feed global dùng eligibility/filter index; `Gần tôi` dùng thêm PostGIS. |
 | Chat send message | P95 < 500ms | Tin nhắn text phải phản hồi nhanh; upload ảnh/file xử lý riêng. |
 | Mobile startup | < 3s ở mạng bình thường | Splash không giữ quá lâu nếu token/session đã có. |
 | Pagination | Bắt buộc | Áp dụng cho list users, messages, bookings, reports, notifications nếu có. |
@@ -1019,12 +1017,12 @@ Không phải entity nào cũng mở đủ bốn verb CRUD. Dữ liệu giao d�
 | Portfolio | `/me/portfolio/{portfolioItemId}` | `DELETE` | Photographer | Xóa mềm portfolio item. |
 | Portfolio | `/me/portfolio/order` | `PUT` | Photographer | Thay đổi thứ tự các portfolio item thuộc owner. |
 | Portfolio | `/photographers/{photographerRoleId}/portfolio` | `GET` | User | Lấy portfolio public có phân trang của Photographer. |
-| Discovery | `/discovery/candidates` | `GET` | User | Lấy candidate cho màn hình quẹt theo filter params. |
-| Nearby | `/nearby` | `GET` | User | Lấy danh sách/map nearby theo filter params. |
+| Discovery | `/discovery/candidates` | `GET` | User | Lấy candidate cho màn hình quẹt; không có radius là global, có radius là `Gần tôi` và trả distance bucket. |
+| Nearby compatibility | `/nearby` | `GET` | User | Giữ tương thích API với bán kính mặc định 20 km; mobile MVP không có route/tab riêng. |
 | Location | `/me/location` | `PUT` | User | Ghi đè vị trí chính xác mới nhất của owner; không trả cho user khác. |
 | Location | `/me/location` | `DELETE` | User | Xóa vị trí chính xác đã lưu và tắt discovery presence. |
 | Presence | `/me/discovery-presence` | `GET` | User | Lấy trạng thái/vòng đời presence hiện tại của role đang active. |
-| Presence | `/me/discovery-presence` | `PUT` | User | Bật/tắt hiển thị discovery/nearby và thời hạn vị trí. |
+| Presence | `/me/discovery-presence` | `PUT` | User | Bật/tắt hiển thị trong kết quả `Gần tôi` và thời hạn vị trí. |
 | Swipes | `/swipes` | `POST` | User | Tạo quyết định candidate như `LEFT` hoặc Customer `RIGHT`; accept/reject incoming interest dùng endpoint riêng. |
 | Interests | `/interests/incoming` | `GET` | Photographer | Lấy Customer interests chưa xử lý có phân trang. |
 | Interests | `/interests/{interestId}/decision` | `POST` | Photographer | Chấp nhận hoặc từ chối đúng interest đang pending. |
@@ -1050,7 +1048,7 @@ Không phải entity nào cũng mở đủ bốn verb CRUD. Dữ liệu giao d�
 | Reports | `/reports` | `POST` | User | Tạo report từ profile/chat/booking. |
 | Restrictions | `/me/restrictions` | `GET` | User | Lấy account/feature penalty đang hiệu lực để render penalty screen. |
 | Settings | `/me/settings` | `GET` | User | Lấy settings. |
-| Settings | `/me/settings` | `PATCH` | User | Cập nhật theme, language, map type, notification, read receipt. |
+| Settings | `/me/settings` | `PATCH` | User | Cập nhật theme, language, notification và read receipt. |
 | Uploads | `/uploads/presign` | `POST` | User | Lấy pre-signed URL để upload trực tiếp lên Cloudflare R2 theo owner/purpose. |
 | Uploads | `/uploads/{uploadId}/complete` | `POST` | Upload owner | Xác nhận upload R2 hoàn tất, verify metadata và chuyển asset sang usable. |
 | Uploads | `/uploads/{assetId}/access-url` | `POST` | Authorized user | Cấp signed download URL ngắn hạn sau domain authorization. |
@@ -1120,7 +1118,6 @@ Thống nhất chọn **Option B: NestJS API + Prisma + PostgreSQL/PostGIS**. Kh
 | Validation | Zod |
 | Swipe gesture | React Native Gesture Handler |
 | Animation | React Native Reanimated |
-| Map | react-native-maps |
 | Device location | Expo Location |
 | Backend API | NestJS, TypeScript |
 | ORM | Prisma |
@@ -1156,7 +1153,7 @@ Thống nhất chọn **Option B: NestJS API + Prisma + PostgreSQL/PostGIS**. Kh
 | Server state | TanStack Query |
 | Form & validation | React Hook Form, Zod |
 | Gesture & animation | React Native Gesture Handler, React Native Reanimated |
-| Map & location | react-native-maps, Expo Location |
+| Device location | Expo Location |
 | Notification | Expo Notifications, Firebase Cloud Messaging |
 | Monitoring & analytics | Sentry, PostHog hoặc Firebase Analytics |
 | Build/deploy | Expo Application Services (EAS) |
@@ -1188,13 +1185,10 @@ photomatch-mobile/                     # Thư mục gốc của ứng dụng mob
 |   |   `-- complete.tsx               # Màn hình hoàn tất onboarding
 |   |-- (tabs)/                        # Nhóm route chính hiển thị trong bottom tabs
 |   |   |-- _layout.tsx                # Layout cấu hình tab navigation
-|   |   |-- discovery/                 # Tab quẹt khám phá hồ sơ
+|   |   |-- discovery/                 # Tab quẹt và lọc khám phá hồ sơ
 |   |   |   |-- index.tsx              # Màn hình danh sách thẻ quẹt
-|   |   |   |-- filters.tsx            # Màn hình bộ lọc cho discovery
+|   |   |   |-- filters.tsx            # Bộ lọc service/price/Gần tôi/radius
 |   |   |   `-- interests.tsx          # Danh sách Customer đang quan tâm cho Photographer
-|   |   |-- nearby/                    # Tab quanh đây dựa trên bản đồ và vị trí
-|   |   |   |-- index.tsx              # Màn hình bản đồ người dùng hoặc thợ ảnh gần đây
-|   |   |   `-- filters.tsx            # Màn hình bộ lọc cho nearby
 |   |   |-- messages/                  # Tab danh sách cuộc trò chuyện
 |   |   |   `-- index.tsx              # Màn hình inbox và danh sách chat
 |   |   `-- profile/                   # Tab hồ sơ cá nhân
@@ -1242,7 +1236,6 @@ photomatch-mobile/                     # Thư mục gốc của ứng dụng mob
 |   |   |-- photographer/              # Logic và UI riêng cho thợ ảnh
 |   |   |-- portfolio/                 # Logic và UI cho portfolio
 |   |   |-- discovery/                 # Logic và UI cho luồng quẹt khám phá
-|   |   |-- nearby/                    # Logic và UI cho chức năng quanh đây
 |   |   |-- location/                  # Logic xử lý vị trí và quyền truy cập
 |   |   |-- swipe/                     # Logic gesture quẹt trái/phải
 |   |   |-- match/                     # Logic kết nối sau khi hai bên quan tâm nhau
@@ -1259,7 +1252,6 @@ photomatch-mobile/                     # Thư mục gốc của ứng dụng mob
 |   |   |-- ui/                        # Component UI cơ bản như button, input, modal
 |   |   |-- layout/                    # Component bố cục như screen, container, section
 |   |   |-- feedback/                  # Component trạng thái như loading, empty, error
-|   |   |-- map/                       # Component bản đồ và marker
 |   |   `-- navigation/                # Component hỗ trợ navigation
 |   |-- services/                      # Lớp giao tiếp hạ tầng và API
 |   |   |-- api/                       # Cấu hình API client và kiểu response
@@ -1308,7 +1300,6 @@ photomatch-mobile/                     # Thư mục gốc của ứng dụng mob
 |   |   |-- common.schema.ts           # Schema dùng chung cho nhiều feature
 |   |   `-- pagination.schema.ts       # Schema phân trang
 |   |-- utils/                         # Hàm tiện ích thuần
-|   |   |-- distance.ts                # Tính khoảng cách theo tọa độ
 |   |   |-- format-date.ts             # Định dạng ngày giờ
 |   |   |-- format-distance.ts         # Định dạng khoảng cách hiển thị
 |   |   |-- format-price.ts            # Định dạng giá tiền
@@ -1645,7 +1636,6 @@ photomatch-api/                     # Thư mục gốc của backend API Photoma
 |   |   |-- analytics/              # Tích hợp analytics
 |   |   |-- email/                  # Tích hợp gửi email
 |   |   |-- oauth-providers/        # Adapter xác minh Google/Apple identity assertion
-|   |   |-- maps/                   # Tích hợp bản đồ và geocoding
 |   |   |-- push-notification/      # Tích hợp gửi push notification
 |   |   `-- storage/                # Tích hợp storage provider
 |   |-- jobs/                       # Background jobs và scheduled tasks
@@ -1745,7 +1735,6 @@ src/modules/swipes/
 ```env
 EXPO_PUBLIC_API_URL=             # Base URL của backend API cho mobile app
 EXPO_PUBLIC_WEBSOCKET_URL=       # URL WebSocket hoặc realtime backend
-EXPO_PUBLIC_GOOGLE_MAPS_API_KEY= # API key Google Maps cho bản đồ và vị trí
 EXPO_PUBLIC_SENTRY_DSN=          # DSN Sentry để ghi nhận lỗi mobile
 EXPO_PUBLIC_POSTHOG_KEY=         # Project key PostHog cho analytics mobile
 EXPO_PUBLIC_POSTHOG_HOST=        # Host PostHog khi dùng self-host hoặc region riêng
@@ -1801,7 +1790,7 @@ SENTRY_DSN=             # DSN Sentry để ghi nhận lỗi backend
 - Backend có API riêng, database PostgreSQL/PostGIS, Cloudflare R2 cho ảnh/file và Redis/cache/queue.
 - Push notification dùng Firebase Cloud Messaging.
 - Monitoring dùng Sentry; analytics dùng PostHog hoặc Firebase Analytics.
-- Map/location dùng Google Maps Platform và cần bật billing/budget alert ngay từ đầu.
+- Bộ lọc `Gần tôi` dùng Expo Location và backend PostGIS; mobile không tích hợp map provider hoặc tab Nearby.
 
 ## Chi phí ban đầu
 
@@ -1822,7 +1811,6 @@ SENTRY_DSN=             # DSN Sentry để ghi nhận lỗi backend
 | Web admin hosting | Vercel | 0 USD | 20+ USD | Hobby đủ thử nghiệm; Pro phù hợp team và production. |
 | Mobile build/update | Expo EAS | 0-19 USD | 19-199 USD | Starter đủ giai đoạn launch nhỏ; Production khi cần concurrency, quota update cao và support. |
 | Push notification | Firebase Cloud Messaging | 0 USD | 0 USD | FCM là nhóm no-cost; chi phí phát sinh nếu dùng thêm paid Firebase/Google Cloud services. |
-| Map & geocoding | Google Maps Platform | 0-100 USD | 100+ USD | Bắt buộc đặt quota/budget alert; có free monthly calls theo SKU, subscription Starter từ 100 USD/tháng nếu muốn dự đoán chi phí. |
 | Error monitoring | Sentry | 0 USD | 26-80+ USD | Free đủ dev; Team/Business khi cần team workflow, quota và retention tốt hơn. |
 | Product analytics | PostHog hoặc Firebase Analytics | 0 USD | 0-50+ USD | PostHog có free tier lớn; chi phí tăng theo event/session replay/feature flag. |
 | CI/CD repository | GitLab/GitHub | 0 USD | 0-50+ USD | Phát sinh khi vượt CI minutes, cần private runner hoặc thêm seat. |
@@ -1834,13 +1822,12 @@ SENTRY_DSN=             # DSN Sentry để ghi nhận lỗi backend
 | Giai đoạn | Chi phí/tháng tham khảo | Phù hợp khi |
 | :---- | :---- | :---- |
 | Development nội bộ | 0-40 USD/tháng | Chưa public, ít build, ít dữ liệu, dùng free tier. |
-| MVP launch tiết kiệm | 90-180 USD/tháng | Có user thật, dùng managed PostgreSQL nhỏ, backend container nhỏ, web admin production, EAS Starter, monitoring cơ bản. |
-| MVP production ổn định | 250-450 USD/tháng | Có traffic đều, cần EAS Production hoặc Google Maps subscription, Sentry paid, backend compute riêng. |
-| Growth sau MVP | 500+ USD/tháng | Tăng MAU, nhiều ảnh portfolio, nhiều map/geocoding request, cần scale database/compute. |
+| MVP launch tiết kiệm | 50-150 USD/tháng | Có user thật, dùng managed PostgreSQL nhỏ, backend container nhỏ, web admin production, EAS Starter, monitoring cơ bản. |
+| MVP production ổn định | 150-350 USD/tháng | Có traffic đều, cần EAS Production, Sentry paid và backend compute riêng. |
+| Growth sau MVP | 400+ USD/tháng | Tăng MAU, nhiều ảnh portfolio và truy vấn `Gần tôi`, cần scale database/compute. |
 
 ## Hạng mục dễ phát sinh chi phí
 
-- Google Maps request tăng nhanh nếu map reload thường xuyên, geocoding mỗi lần mở màn hình hoặc không cache kết quả.
 - Portfolio ảnh làm tăng storage và bandwidth; cần giới hạn dung lượng upload, tạo thumbnail và nén ảnh.
 - Sentry có thể tăng bill khi app lỗi hàng loạt; cần sampling, rate limit và alert theo quota.
 - PostHog tăng theo event/session replay; chỉ tracking event thật sự cần cho quyết định sản phẩm.
@@ -1849,8 +1836,7 @@ SENTRY_DSN=             # DSN Sentry để ghi nhận lỗi backend
 
 ## Nguyên tắc kiểm soát ngân sách
 
-- Đặt billing alert cho database provider, API hosting, object storage, Vercel, Google Cloud/Firebase, Google Maps, Sentry, PostHog và Expo.
-- Tạo quota cho Google Maps API key theo platform và domain/package name.
+- Đặt billing alert cho database provider, API hosting, object storage, Vercel, Google Cloud/Firebase, Sentry, PostHog và Expo.
 - Tắt hoặc sampling session replay, performance tracing và analytics event không cần thiết.
 - Resize ảnh phía client/server trước khi lưu storage.
 - Dùng môi trường dev/staging tách biệt với production nhưng đặt quota thấp.
@@ -1861,7 +1847,6 @@ SENTRY_DSN=             # DSN Sentry để ghi nhận lỗi backend
 - Vercel pricing: https://vercel.com/pricing
 - Expo EAS pricing: https://expo.dev/pricing
 - Firebase pricing: https://firebase.google.com/pricing
-- Google Maps Platform pricing: https://mapsplatform.google.com/pricing
 - Sentry pricing: https://sentry.io/pricing/
 - PostHog pricing: https://posthog.com/pricing
 - Neon pricing: https://neon.com/pricing

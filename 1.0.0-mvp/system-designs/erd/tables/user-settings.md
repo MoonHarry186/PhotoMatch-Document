@@ -17,7 +17,7 @@ Lưu thiết lập cá nhân, quyền riêng tư, giao diện và cấu hình hi
 | `user_id` | `uuid` | Khóa chính, Khóa ngoại | Khóa ngoại tham chiếu `USERS`. |
 | `language` | `varchar` | Không | Ngôn ngữ giao diện người dùng chọn. |
 | `theme` | `varchar` | Không | Giao diện sáng, tối hoặc theo hệ thống. |
-| `map_type` | `varchar` | Không | Kiểu bản đồ mặc định. |
+| `map_type` | `varchar` | Không | Trường dormant tương thích dữ liệu cũ; map type deferred sau MVP theo `CR-002`. |
 | `push_enabled` | `boolean` | Không | Cho phép nhận push notification. |
 | `location_enabled` | `boolean` | Không | Cho phép sử dụng vị trí. |
 | `profile_discoverable` | `boolean` | Không | Cho phép hồ sơ xuất hiện trong discovery. |
